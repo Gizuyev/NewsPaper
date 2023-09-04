@@ -27,6 +27,10 @@ body {
     object-fit: cover;
 }
 
+.dark-text {
+    color:black;
+}
+
 .tag-container {
     margin-bottom: 0;
 }

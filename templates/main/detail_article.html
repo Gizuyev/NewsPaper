@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} Detail article {% endblock title %}
+
+{% block content %}
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-8">
+                <a href="{% url 'edit_article' article.id %}">
+                <button class = "btn btn-success" type="submit">Редактировать</button>
+                </a>
+                <h1>{{ article.title }}</h1>
+                <p class="text-muted">by {{ article.author }} | {{ article.published_date }}</p>
+                {% if article.image_url %}
+                    <img src="{{ article.image_url.url }}" alt="{{ article.title }}" class = "card-img-top article-image">
+                {% endif %}
+                <p>{{ article.summary }}</p>
+                <hr>
+                <div>{{ article.content | safe }}</div>
+                <hr>
+                <p class="tag-container">
+                    <strong> Tags: </strong>
+                    {% for tag in article.tags.all %}
+                    <a href="{% url 'get_article_by_tag' tag.id %}">
+                        <span class="badge bg-primary-gradient"> #{{ tag.tag_name}}</span>
+                    </a>
+                    {% endfor %}
+                </p>
+            </div>
+            
+            <div class="comments mt-3">
+                <h3>Коментарии:</h3>
+                {% for comment in article.comments_set.all %}
+                <form method="post" action="{% url 'delete_comment' comment.id %}">
+                    {% csrf_token %}
+                    <input class="btn btn-danger"type="submit" value="удалить">
+                </form>
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header py-3">
+                            <h5 class ="m-0">{{ comment.user }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.text }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form action="{% url 'add_comment' article.id %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-success" type="submit" value="Отправить">
+            </form>
+        </div>
+    </div>
+{% endblock content %}
