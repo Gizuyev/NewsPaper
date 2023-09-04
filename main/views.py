@@ -38,6 +38,9 @@ def get_article_by_tag(request, tag_id):
 def detail_article(request, pk):
     article = get_object_or_404(Article, id=pk)
     form = CommentsForm()
+
+    article.increment_view_count()
+
     context = {
         'article': article,
         'form': form

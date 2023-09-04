@@ -29,6 +29,7 @@
                     <a href="{% url 'detail_article' article.id %}" class="dark-text">{{ article.title }}</a>
                 </h5>
                 <p class="card-text">{{ article.content|truncatewords:20 }}</p>
+                <p class="text-muted ml-2">Просмотров: {{ article.view_count }}</p>
                 <p class="card-subtitle text-muted mb-2">by {{ article.author }} | {{ article.date }}</p>
 
                 <p class="tag-container">

@@ -35,12 +35,13 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     summary = models.TextField()
     content = models.TextField()
-    author = models.ForeignKey(Author, on_delete=models.PROTECT,
-                               related_name='author_articles')
+    author = models.ForeignKey(Author, on_delete=models.PROTECT, related_name='author_articles')
     published_date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     image_url = models.ImageField(upload_to='media', blank=True)
     tags = models.ManyToManyField(Tags)
+    
+    view_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ["-published_date"]
@@ -48,9 +49,12 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-
     def get_absolute_url(self):
         return reverse("detail_article", kwargs={"pk": self.pk})
+    
+    def increment_view_count(self):
+        self.view_count += 1
+        self.save()
 
 
 class Comments(models.Model):
