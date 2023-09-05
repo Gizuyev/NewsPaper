@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
-
+from django.views.generic import UpdateView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from .forms import ArticleForm, CategoryForm, TagForm, CommentsForm
-from .models import Article, Category, Comments
+from .models import Article, Category, Comments, Likes
 
 def index(request):
     articles = Article.objects.all()
@@ -112,3 +112,17 @@ def delete_comment(request, pk):
         comment.delete()
 
     return redirect('detail_article', pk=comment.article.id)
+
+
+def like_article(request, article_id):
+    article = Article.objects.get(pk=article_id)
+    user_has_liked = Likes.objects.filter(who_likes=request.user, article=article).exists()
+    existing_like = Likes.objects.filter(who_likes=request.user, article=article).first()
+
+    if user_has_liked:
+        existing_like.delete()
+    else:
+        new_like = Likes(who_likes=request.user, article=article, count_of_likes=1)
+        new_like.save()
+
+    return HttpResponseRedirect(reverse('detail_article', args=[article_id]))

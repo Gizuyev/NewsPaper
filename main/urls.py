@@ -12,4 +12,5 @@ urlpatterns = [
     path('article_edit/<int:pk>/', views.EditArticleView.as_view(), name='edit_article'),
     path('add_comment/<int:pk>/', views.add_comment, name='add_comment'),
     path('delete_comment/<int:pk>/', views.delete_comment, name='delete_comment'),
+    path('like_article/<int:article_id>/', views.like_article, name='like_article'),
 ]

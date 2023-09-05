@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %} Detail article {% endblock title %}
 
 {% block content %}
 <div class="container"> 
     <div class="row">
         <div class="col-md-8">
-            <!-- Вывод просмотров -->
             <p class="text-muted ml-2">Просмотров: {{ article.view_count }}</p>
             <a href="{% url 'edit_article' article.id %}">
                 <button class="btn btn-success" type="submit">Редактировать</button>
@@ -21,6 +20,10 @@
             <div>{{ article.content | safe }}</div>
             <hr>
             <p class="tag-container">
+                <a id="like-button" href="{% url 'like_article' article.id %}" class="like-button">
+                    <img src="{% static 'images/1.png' %}" alt="Like" style="margin-bottom: 3px;">
+                    <span id="like-count" class="like-count">{{ article.article_likes.count }}</span> Нравится
+                </a>
                 <strong> Tags: </strong>
                 {% for tag in article.tags.all %}
                 <a href="{% url 'get_article_by_tag' tag.id %}">
